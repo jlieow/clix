@@ -3,7 +3,50 @@ package util
 import (
     "testing"
     "fmt"
+		"os"
 )
+
+func TestSetEnv(t *testing.T) {
+
+	var vars = []RunFunctionVars{
+		{
+			Key:   "zzzzzzzzzzzzzzzzzz",
+			Value: "zzzzzzzzzzzzzzzzzz",
+		},
+	}
+
+	setEnv(vars)
+
+	value, exists := os.LookupEnv("zzzzzzzzzzzzzzzzzz")
+	if exists {
+		// Environment variable exists, value is non-empty (can be empty string though)
+		fmt.Println("Value:", value)
+	} else {
+		t.Errorf("Environment variable not set")
+	}
+
+}
+
+func TestLoadEnvFile(t *testing.T) {
+
+	var vars = []RunFunctionVars{
+		{
+			Key:   "dir",
+			Value: "../testdata/.env",
+		},
+	}
+
+	loadEnvFile(vars)
+
+	value, exists := os.LookupEnv("testtesttesttest")
+	if exists {
+		// Environment variable exists, value is non-empty (can be empty string though)
+		fmt.Println("Value:", value)
+	} else {
+		t.Errorf("Environment variable not set")
+	}
+
+}
 
 // TestRunPythonWithValidFile checks 
 func TestRunPythonWithValidFile(t *testing.T) {

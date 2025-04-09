@@ -21,18 +21,18 @@ var config = &cobra.Command{
 	Long:  `Performs operations on the config file.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	Run: returnConfigFile,
+	Run: command,
 }
 
-func returnConfigFile(cmd *cobra.Command, args []string) {
+func command(cmd *cobra.Command, args []string) {
 
 	// Read the config file using os.ReadFile instead of ioutil.ReadFile
 	configPath := util.GetConfigFilePath()
 
 	write_flag, err := cmd.Flags().GetBool("write")
 
+	// If write flag seen, open the file in editor based on the operating system
 	if write_flag {
-		// Open the file in the chosen editor
 		if err := util.OpenFileInEditor(configPath); err != nil {
 			fmt.Println("Error:", err)
 		} else {

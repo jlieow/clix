@@ -7,13 +7,13 @@ import (
 	"os"
 	"strings"
 	"syscall"
-
+	
 	"github.com/spf13/cobra"
 )
 
 // GetGoModuleName reads the go.mod file in the current directory
 // and returns the module name defined in it.
-func getGoModuleName() (string, error) {
+func GetGoModuleName() (string, error) {
 	file, err := os.Open("go.mod")
 	if err != nil {
 		return "", err
@@ -37,7 +37,7 @@ func getGoModuleName() (string, error) {
 
 // GetGoPath returns the GOPATH environment variable.
 // If not set, it falls back to the default ($HOME/go).
-func getGoPath() string {
+func GetGoPath() string {
 	if gopath := os.Getenv("GOPATH"); gopath != "" {
 		return gopath
 	}
@@ -56,8 +56,8 @@ func createSymLinksFromConfig(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	go_path := getGoPath()
-	module_name, get_module_name_err := getGoModuleName()
+	go_path := GetGoPath()
+	module_name, get_module_name_err := GetGoModuleName()
 	if get_module_name_err != nil {
 		log.Fatal(get_module_name_err)
 	}

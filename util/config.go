@@ -64,31 +64,6 @@ func GetConfigFilePath() string {
 	return configDir
 }
 
-// func returnConfigFile() {
-
-// 	// Read the config file using os.ReadFile instead of ioutil.ReadFile
-// 	configPath := GetConfigFilePath()
-
-// 	write_flag, err := cmd.Flags().GetBool("write")
-
-// 	if write_flag {
-// 		// Open the file in the chosen editor
-// 		if err := OpenFileInEditor(configPath); err != nil {
-// 			fmt.Println("Error:", err)
-// 		} else {
-// 			fmt.Println("File opened successfully for editing.")
-// 		}
-// 		return
-// 	}
-
-// 	fileContent, err := os.ReadFile(configPath)
-// 	if err != nil {
-// 		log.Fatalf("Error reading config file: %v", err)
-// 	}
-
-// 	fmt.Printf(string(fileContent))
-// }
-
 func GetListConfigCommand() []string {
 	// Read the config file using os.ReadFile instead of ioutil.ReadFile
 	configPath := GetConfigFilePath()

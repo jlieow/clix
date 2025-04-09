@@ -1,11 +1,9 @@
 package symlink
 
 import (
-	"bufio"
 	"fmt"
 	"log"
 	"os"
-	"strings"
 	"syscall"
 
 	"clix/cmd"
@@ -26,42 +24,42 @@ var symlinkCmd = &cobra.Command{
 	Run: createSymLinksFromConfig,
 }
 
-// GetGoModuleName reads the go.mod file in the current directory
-// and returns the module name defined in it.
-func getGoModuleName() (string, error) {
-	file, err := os.Open("go.mod")
-	if err != nil {
-		return "", err
-	}
-	defer file.Close()
+// // GetGoModuleName reads the go.mod file in the current directory
+// // and returns the module name defined in it.
+// func GetGoModuleName() (string, error) {
+// 	file, err := os.Open("go.mod")
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	defer file.Close()
 
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := strings.TrimSpace(scanner.Text())
-		if strings.HasPrefix(line, "module ") {
-			return strings.TrimSpace(strings.TrimPrefix(line, "module ")), nil
-		}
-	}
+// 	scanner := bufio.NewScanner(file)
+// 	for scanner.Scan() {
+// 		line := strings.TrimSpace(scanner.Text())
+// 		if strings.HasPrefix(line, "module ") {
+// 			return strings.TrimSpace(strings.TrimPrefix(line, "module ")), nil
+// 		}
+// 	}
 
-	if err := scanner.Err(); err != nil {
-		return "", err
-	}
+// 	if err := scanner.Err(); err != nil {
+// 		return "", err
+// 	}
 
-	return "", os.ErrNotExist
-}
+// 	return "", os.ErrNotExist
+// }
 
-// GetGoPath returns the GOPATH environment variable.
-// If not set, it falls back to the default ($HOME/go).
-func getGoPath() string {
-	if gopath := os.Getenv("GOPATH"); gopath != "" {
-		return gopath
-	}
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return ""
-	}
-	return home + "/go"
-}
+// // GetGoPath returns the GOPATH environment variable.
+// // If not set, it falls back to the default ($HOME/go).
+// func GetGoPath() string {
+// 	if gopath := os.Getenv("GOPATH"); gopath != "" {
+// 		return gopath
+// 	}
+// 	home, err := os.UserHomeDir()
+// 	if err != nil {
+// 		return ""
+// 	}
+// 	return home + "/go"
+// }
 
 func createSymLinksFromConfig(cmd *cobra.Command, args []string) {
 
@@ -71,8 +69,8 @@ func createSymLinksFromConfig(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	go_path := getGoPath()
-	module_name, get_module_name_err := getGoModuleName()
+	go_path := util.GetGoPath()
+	module_name, get_module_name_err := util.GetGoModuleName()
 	if get_module_name_err != nil {
 		log.Fatal(get_module_name_err)
 	}
