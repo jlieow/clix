@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"os/exec"
 
 	"github.com/spf13/cobra"
 )
@@ -29,8 +31,33 @@ customize, and chain commands with ease.`,
 func Execute() {
 
 	fmt.Println("Command used to run the program:", os.Args)
-	if os.Args[0] != "clix" {
-		fmt.Println("not clix")
+
+	alias := os.Args[0]
+	if alias != "clix" {
+
+		getConfigAlias(alias)
+
+		preHooks := getConfigAliasHooks(alias, "prehook")
+		runHooks(preHooks)
+
+		command := os.Args
+		command[0] = getConfigAliasCommand(alias)
+
+		// Use exec.Command and expand the array using '...' to pass individual arguments
+		cmd := exec.Command(command[0], command[1:]...)
+
+		// Capture the output of the command
+		output, err := cmd.Output()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Print the output of the command
+		fmt.Println(string(output))
+
+		postHooks := getConfigAliasHooks(alias, "posthook")
+		runHooks(postHooks)
+
 		return
 	}
 

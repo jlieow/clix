@@ -29,16 +29,16 @@ var config = &cobra.Command{
 
 // Task represents a task to perform before running the command
 type Hooks struct {
-	Task       string            `json:"task"`
-	EnvVars    map[string]string `json:"env_vars,omitempty"`
-	Message    string            `json:"message,omitempty"`
-	FilePath   string            `json:"file_path,omitempty"`
-	RunCommand string            `json:"run command,omitempty"`
+	Task        string            `json:"task"`
+	EnvVars     map[string]string `json:"env_vars,omitempty"`
+	Message     string            `json:"message,omitempty"`
+	FilePath    string            `json:"file_path,omitempty"`
+	RunCommand  string            `json:"run_command,omitempty"`
+	RunFunction string            `json:"run_function,omitempty"`
 }
 
 // Command represents the structure for each command to execute
 type Command struct {
-	Alias       string  `json:"alias"`
 	Command     string  `json:"command"`
 	Description string  `json:"description"`
 	PreHooks    []Hooks `json:"prehooks"`
@@ -127,6 +127,109 @@ func returnConfigFile(cmd *cobra.Command, args []string) {
 	fmt.Printf(string(fileContent))
 }
 
+func getListConfigCommand() []string {
+	// Read the config file using os.ReadFile instead of ioutil.ReadFile
+	configPath := getConfigFilePath()
+
+	fileContent, err := os.ReadFile(configPath)
+	if err != nil {
+		log.Fatalf("Error reading config file: %v", err)
+	}
+
+	// Declare a Config object to hold the parsed data
+	var config Config
+
+	// Parse the JSON string into the config object
+	err = json.Unmarshal([]byte(fileContent), &config)
+	if err != nil {
+		log.Fatal("Error parsing JSON: ", err)
+	}
+
+	var keys []string
+	for k := range config.Commands {
+		keys = append(keys, k)
+	}
+
+	return keys
+}
+
+func getConfigAlias(command string) {
+	// Read the config file using os.ReadFile instead of ioutil.ReadFile
+	configPath := getConfigFilePath()
+
+	fileContent, err := os.ReadFile(configPath)
+	if err != nil {
+		log.Fatalf("Error reading config file: %v", err)
+	}
+
+	// Declare a Config object to hold the parsed data
+	var config Config
+
+	// Parse the JSON string into the config object
+	err = json.Unmarshal([]byte(fileContent), &config)
+	if err != nil {
+		log.Fatal("Error parsing JSON: ", err)
+	}
+
+	// Extract command "q"
+	if cmd, exists := config.Commands[command]; exists {
+		fmt.Println("Command:", cmd)
+	} else {
+		fmt.Println("Command not found in config")
+	}
+}
+
+func getConfigAliasCommand(command string) string {
+	// Read the config file using os.ReadFile instead of ioutil.ReadFile
+	configPath := getConfigFilePath()
+
+	fileContent, err := os.ReadFile(configPath)
+	if err != nil {
+		log.Fatalf("Error reading config file: %v", err)
+	}
+
+	// Declare a Config object to hold the parsed data
+	var config Config
+
+	// Parse the JSON string into the config object
+	err = json.Unmarshal([]byte(fileContent), &config)
+	if err != nil {
+		log.Fatal("Error parsing JSON: ", err)
+	}
+
+	// Return an empty slice of Hooks
+	return config.Commands[command].Command
+}
+
+func getConfigAliasHooks(command string, hooktype string) []Hooks {
+	// Read the config file using os.ReadFile instead of ioutil.ReadFile
+	configPath := getConfigFilePath()
+
+	fileContent, err := os.ReadFile(configPath)
+	if err != nil {
+		log.Fatalf("Error reading config file: %v", err)
+	}
+
+	// Declare a Config object to hold the parsed data
+	var config Config
+
+	// Parse the JSON string into the config object
+	err = json.Unmarshal([]byte(fileContent), &config)
+	if err != nil {
+		log.Fatal("Error parsing JSON: ", err)
+	}
+
+	// Returns correct hook
+	if hooktype == "prehook" {
+		return config.Commands[command].PreHooks
+	} else if hooktype == "posthook" {
+		return config.Commands[command].PostHooks
+	}
+
+	// Return an empty slice of Hooks
+	return []Hooks{}
+}
+
 // createConfigFile creates a configuration file at the determined path
 func createConfigFile() {
 	// Get the config file path
@@ -171,8 +274,7 @@ func createConfigFile() {
 	// Create an empty Config struct
 	config_json := Config{
 		Commands: map[string]Command{
-			"sample_command": {
-				Alias:       "",
+			"alias": {
 				Command:     "",
 				Description: "",
 				PreHooks:    []Hooks{},

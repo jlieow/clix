@@ -20,7 +20,7 @@ var symlinkCmd = &cobra.Command{
 	Long:  `Creates symlinks based on the config file located at xxx`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	Run: createSymLinks,
+	Run: createSymLinksFromConfig,
 }
 
 // GetGoModuleName reads the go.mod file in the current directory
@@ -58,6 +58,43 @@ func getGoPath() string {
 		return ""
 	}
 	return home + "/go"
+}
+
+func createSymLinksFromConfig(cmd *cobra.Command, args []string) {
+
+	go_path := getGoPath()
+	module_name, get_module_name_err := getGoModuleName()
+	if get_module_name_err != nil {
+		log.Fatal(get_module_name_err)
+	}
+
+	clix_path := fmt.Sprintf("%s/bin/%s", go_path, module_name)
+
+	src := clix_path
+	// dst := "/usr/local/bin/q"
+
+	list_of_commands := getListConfigCommand()
+
+	for _, command := range list_of_commands {
+		dst := "/usr/local/bin/" + command
+
+		// Checks if file exists
+		// If it does, removes symlink to remove any previous links
+		if _, err := os.Stat(dst); err == nil {
+			remove_err := os.Remove(dst)
+			if remove_err != nil {
+				log.Fatal(remove_err)
+			}
+		}
+
+		// Creates symlinks
+		create_err := os.Symlink(src, dst)
+		if create_err != nil {
+			log.Fatalf("Error creating symlink: %v", create_err)
+		}
+
+		log.Println("Symlink for " + command + " created successfully")
+	}
 }
 
 func createSymLinks(cmd *cobra.Command, args []string) {
