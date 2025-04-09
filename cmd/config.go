@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"os/user"
 	"path/filepath"
 	"runtime"
@@ -14,6 +15,7 @@ import (
 
 func init() {
 	rootCmd.AddCommand(config)
+	config.Flags().BoolP("write", "w", false, "Opens up the config file for editing.")
 }
 
 var config = &cobra.Command{
@@ -102,10 +104,21 @@ func GetConfigFilePath() string {
 
 func returnConfigFile(cmd *cobra.Command, args []string) {
 
-	// fmt.Printf(os.ReadDir())
-
 	// Read the config file using os.ReadFile instead of ioutil.ReadFile
 	configPath := GetConfigFilePath()
+
+	write_flag, err := cmd.Flags().GetBool("write")
+
+	if write_flag {
+		// Open the file in the chosen editor
+		if err := openFileInEditor(configPath); err != nil {
+			fmt.Println("Error:", err)
+		} else {
+			fmt.Println("File opened successfully for editing.")
+		}
+		return
+	}
+
 	fileContent, err := os.ReadFile(configPath)
 	if err != nil {
 		log.Fatalf("Error reading config file: %v", err)
@@ -135,7 +148,7 @@ func CreateConfigFile() {
 	if _, err := os.Stat(configPath); err == nil {
 		// File exists, skip the rest of the function
 		fmt.Println("File already exists, skipping the rest of the function.")
-		// return
+		return
 	}
 
 	// Create the configuration file
@@ -145,6 +158,14 @@ func CreateConfigFile() {
 		return
 	}
 	defer file.Close()
+
+	// Set write permissions (rw for owner, and read for others)
+	// 0644: rw-r--r--
+	err = os.Chmod(configPath, 0644)
+	if err != nil {
+		fmt.Println("failed to set file permissions:", err)
+		return
+	}
 
 	// Example content to write to the config file
 	// Create an empty Config struct
@@ -174,6 +195,34 @@ func CreateConfigFile() {
 	}
 
 	fmt.Printf("Config file created successfully at: %s\n", configPath)
+}
+
+func openFileInEditor(filePath string) error {
+	var editorCommand string
+
+	// Choose the editor based on the operating system
+	if runtime.GOOS == "windows" {
+		// On Windows, use notepad or any other editor installed
+		editorCommand = "notepad"
+	} else {
+		// On Unix-like systems (Linux/macOS), use vim or nano
+		editorCommand = "vim"
+	}
+
+	fmt.Println("here:", filePath)
+
+	// Run the editor command to open the file
+	cmd := exec.Command(editorCommand, filePath)
+	// Pass on stdin and stdout from the calling program which, provided it was run from a terminal (likely for a command line program) will start vim for you and return control when the user has finished editing the file.
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+
+	err := cmd.Run()
+	if err != nil {
+		return fmt.Errorf("failed to open file: %v", err)
+	}
+
+	return nil
 }
 
 func main() {
