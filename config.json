@@ -42,7 +42,26 @@
           ]
         }
       ],
-      "posthooks": []
+      "posthooks": [
+        {
+          "run_function": "run_python",
+          "run_function_vars": [
+            {
+              "key": "path",
+              "value": "main.py"
+            }
+          ]
+        },
+        {
+          "run_function": "run_javascript",
+          "run_function_vars": [
+            {
+              "key": "path",
+              "value": "main.js"
+            }
+          ]
+        }
+      ]
     }
   }
 }

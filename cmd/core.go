@@ -78,5 +78,9 @@ func runFunction(command string, vars []RunFunctionVars) {
 		printAllEnv()
 	case "hello_world":
 		helloWorld(vars)
+	case "run_python":
+		runPython(vars)
+	case "run_javascript":
+		runJavaScript(vars)
 	}
 }
