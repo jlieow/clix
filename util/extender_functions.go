@@ -212,12 +212,11 @@ func runJavaScript(vars []RunFunctionVars) error {
 	}
 
 	if !isJS {
-		return fmt.Errorf("Please provide a JavasScript file.")
+		return fmt.Errorf("Please provide a JavaScript file.")
 	}
 
 	// Run the JavaScript script
 	runJavaScriptScript(path)
 
 	return nil
-
 }

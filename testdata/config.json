@@ -48,7 +48,7 @@
           "run_function_vars": [
             {
               "key": "path",
-              "value": "main.py"
+              "value": "testdata/main.py"
             }
           ]
         },
@@ -57,7 +57,7 @@
           "run_function_vars": [
             {
               "key": "path",
-              "value": "main.js"
+              "value": "testdata/main.js"
             }
           ]
         }

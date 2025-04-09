@@ -2,25 +2,39 @@ package util
 
 import (
     "testing"
-    "regexp"
 )
 
 // TestHelloName calls greetings.Hello with a name, checking
 // for a valid return value.
-func TestHelloName(t *testing.T) {
-    name := "Gladys"
-    want := regexp.MustCompile(`\b`+name+`\b`)
-    msg, err := Hello("Gladys")
-    if !want.MatchString(msg) || err != nil {
-        t.Errorf(`Hello("Gladys") = %q, %v, want match for %#q, nil`, msg, err, want)
-    }
+func TestRunPython(t *testing.T) {
+
+	var vars = []RunFunctionVars{
+		{
+			Key:   "path",
+			Value: "../testdata/main.py",
+		},
+	}
+
+	err := runPython(vars)
+
+	if err != nil {
+		t.Errorf(`Hello("") = %v, want "", error`, err)
+	}
 }
 
 // TestHelloEmpty calls greetings.Hello with an empty string,
 // checking for an error.
-func TestHelloEmpty(t *testing.T) {
-    msg, err := Hello("")
-    if msg != "" || err == nil {
-        t.Errorf(`Hello("") = %q, %v, want "", error`, msg, err)
-    }
+func TestRunJavaScript(t *testing.T) {
+	var vars = []RunFunctionVars{
+		{
+			Key:   "path",
+			Value: "../testdata/main.js",
+		},
+	}
+
+	err := runJavaScript(vars)
+
+	if err != nil {
+		t.Errorf(`Hello("") = %v, want "", error`, err)
+	}
 }
