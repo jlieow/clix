@@ -1,4 +1,4 @@
-package cmd
+package util
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ func isZero(v reflect.Value) bool {
 	return reflect.DeepEqual(v.Interface(), reflect.Zero(v.Type()).Interface())
 }
 
-func runHooks(hooks []Hooks) {
+func RunHooks(hooks []Hooks) {
 	for _, hook := range hooks {
 
 		if hook.RunCommand != "" && hook.RunFunction != "" {
@@ -27,27 +27,6 @@ func runHooks(hooks []Hooks) {
 		if hook.RunFunction != "" {
 			runFunction(hook.RunFunction, hook.RunFunctionVars)
 		}
-
-		// Use reflection to iterate through the struct
-		// v := reflect.ValueOf(hook)
-		// t := reflect.TypeOf(hook)
-
-		// for i := 0; i < v.NumField(); i++ {
-		// 	field := v.Field(i)
-		// 	fieldName := t.Field(i).Name
-
-		// 	// Only print fields that have non-zero values
-		// 	if !isZero(field) {
-		// 		fmt.Printf("%s: %v\n", fieldName, field.Interface())
-
-		// 		switch fieldName {
-		// 		case "RunCommand":
-		// 			runCommand(field.Interface().(string))
-		// 		case "RunFunction":
-		// 			runFunction(field.Interface().(string))
-		// 		}
-		// 	}
-		// }
 	}
 }
 

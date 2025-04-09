@@ -59,6 +59,8 @@ Hooks are commands or functions that are executed before or after an alias. They
 The `clix` command has the following structure:
 
 -   `clix`: The main command.
+-   `cmd/config`: Contains configuration related commands.
+-   `cmd/symlink`: Contains symlink related commands.
 -   `Execute()`: Adds all child commands to the root command and sets flags appropriately. This is called by `main.main()`. It also creates a directory with config files.
 
 ## Configuration

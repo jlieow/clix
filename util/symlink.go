@@ -1,4 +1,4 @@
-package cmd
+package util
 
 import (
 	"bufio"
@@ -10,19 +10,6 @@ import (
 
 	"github.com/spf13/cobra"
 )
-
-func init() {
-	rootCmd.AddCommand(symlinkCmd)
-}
-
-var symlinkCmd = &cobra.Command{
-	Use:   "symlink",
-	Short: "Creates symlinks based on the config file.",
-	Long:  `Creates symlinks based on the config file located at xxx`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	Run: createSymLinksFromConfig,
-}
 
 // GetGoModuleName reads the go.mod file in the current directory
 // and returns the module name defined in it.
@@ -80,7 +67,7 @@ func createSymLinksFromConfig(cmd *cobra.Command, args []string) {
 	src := clix_path
 	// dst := "/usr/local/bin/q"
 
-	list_of_commands := getListConfigCommand()
+	list_of_commands := GetListConfigCommand()
 
 	log.Println(list_of_commands)
 
