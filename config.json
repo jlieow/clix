@@ -9,6 +9,9 @@
         },
         {
           "run_function": "load_env_file"
+        },
+        {
+          "run_function": "print_all_env"
         }
       ],
       "posthooks": []

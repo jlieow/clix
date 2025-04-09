@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/joho/godotenv"
 )
@@ -13,4 +14,14 @@ func loadEnvFile() error {
 		return fmt.Errorf("Error loading .env file")
 	}
 	return nil
+}
+
+func printAllEnv() {
+	// Get all environment variables
+	envVars := os.Environ()
+
+	// Print each environment variable
+	for _, envVar := range envVars {
+		fmt.Println(envVar)
+	}
 }

@@ -36,7 +36,7 @@ func runHooks(hooks []Hooks) {
 				case "RunCommand":
 					runCommand(field.Interface().(string))
 				case "RunFunction":
-					fmt.Println("Second day")
+					runFunction(field.Interface().(string))
 				}
 			}
 		}
@@ -56,4 +56,15 @@ func runCommand(command string) {
 
 	// Print the output
 	fmt.Println(string(output))
+}
+
+func runFunction(command string) {
+	fmt.Println(command)
+
+	switch command {
+	case "load_env_file":
+		loadEnvFile()
+	case "print_all_env":
+		printAllEnv()
+	}
 }
