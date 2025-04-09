@@ -74,8 +74,8 @@ func executeTask(task Hooks) {
 	}
 }
 
-// GetConfigFilePath determines the platform-specific path for the config file
-func GetConfigFilePath() string {
+// getConfigFilePath determines the platform-specific path for the config file
+func getConfigFilePath() string {
 	// Get the home directory of the current user
 	usr, err := user.Current()
 	if err != nil {
@@ -105,7 +105,7 @@ func GetConfigFilePath() string {
 func returnConfigFile(cmd *cobra.Command, args []string) {
 
 	// Read the config file using os.ReadFile instead of ioutil.ReadFile
-	configPath := GetConfigFilePath()
+	configPath := getConfigFilePath()
 
 	write_flag, err := cmd.Flags().GetBool("write")
 
@@ -127,10 +127,10 @@ func returnConfigFile(cmd *cobra.Command, args []string) {
 	fmt.Printf(string(fileContent))
 }
 
-// CreateConfigFile creates a configuration file at the determined path
-func CreateConfigFile() {
+// createConfigFile creates a configuration file at the determined path
+func createConfigFile() {
 	// Get the config file path
-	configPath := GetConfigFilePath()
+	configPath := getConfigFilePath()
 
 	// Ensure the config file path is valid
 	if configPath == "" {

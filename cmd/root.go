@@ -34,7 +34,7 @@ func Execute() {
 		return
 	}
 
-	CreateConfigFile()
+	createConfigFile()
 
 	err := rootCmd.Execute()
 	if err != nil {
