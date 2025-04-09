@@ -11,7 +11,20 @@
           "run_function": "load_env_file"
         },
         {
-          "run_function": "print_all_env"
+          "run_command": "printenv"
+        },
+        {
+          "run_function": "hello_world",
+          "run_function_vars": [
+            {
+              "key": "name",
+              "value": "hello"
+            },
+            {
+              "key": "age",
+              "value": "21"
+            }
+          ]
         }
       ],
       "posthooks": []

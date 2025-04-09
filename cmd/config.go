@@ -27,14 +27,21 @@ var config = &cobra.Command{
 	Run: returnConfigFile,
 }
 
+// RunFunctionVars represents the variables associated with a run_function
+type RunFunctionVars struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
 // Task represents a task to perform before running the command
 type Hooks struct {
-	Task        string            `json:"task"`
-	EnvVars     map[string]string `json:"env_vars,omitempty"`
-	Message     string            `json:"message,omitempty"`
-	FilePath    string            `json:"file_path,omitempty"`
-	RunCommand  string            `json:"run_command,omitempty"`
-	RunFunction string            `json:"run_function,omitempty"`
+	Task            string            `json:"task"`
+	EnvVars         map[string]string `json:"env_vars,omitempty"`
+	Message         string            `json:"message,omitempty"`
+	FilePath        string            `json:"file_path,omitempty"`
+	RunCommand      string            `json:"run_command,omitempty"`
+	RunFunction     string            `json:"run_function,omitempty"`
+	RunFunctionVars []RunFunctionVars `json:"run_function_vars,omitempty"`
 }
 
 // Command represents the structure for each command to execute

@@ -20,26 +20,34 @@ func runHooks(hooks []Hooks) {
 			return
 		}
 
-		// Use reflection to iterate through the struct
-		v := reflect.ValueOf(hook)
-		t := reflect.TypeOf(hook)
-
-		for i := 0; i < v.NumField(); i++ {
-			field := v.Field(i)
-			fieldName := t.Field(i).Name
-
-			// Only print fields that have non-zero values
-			if !isZero(field) {
-				fmt.Printf("%s: %v\n", fieldName, field.Interface())
-
-				switch fieldName {
-				case "RunCommand":
-					runCommand(field.Interface().(string))
-				case "RunFunction":
-					runFunction(field.Interface().(string))
-				}
-			}
+		if hook.RunCommand != "" {
+			runCommand(hook.RunCommand)
 		}
+
+		if hook.RunFunction != "" {
+			runFunction(hook.RunFunction, hook.RunFunctionVars)
+		}
+
+		// Use reflection to iterate through the struct
+		// v := reflect.ValueOf(hook)
+		// t := reflect.TypeOf(hook)
+
+		// for i := 0; i < v.NumField(); i++ {
+		// 	field := v.Field(i)
+		// 	fieldName := t.Field(i).Name
+
+		// 	// Only print fields that have non-zero values
+		// 	if !isZero(field) {
+		// 		fmt.Printf("%s: %v\n", fieldName, field.Interface())
+
+		// 		switch fieldName {
+		// 		case "RunCommand":
+		// 			runCommand(field.Interface().(string))
+		// 		case "RunFunction":
+		// 			runFunction(field.Interface().(string))
+		// 		}
+		// 	}
+		// }
 	}
 }
 
@@ -58,7 +66,7 @@ func runCommand(command string) {
 	fmt.Println(string(output))
 }
 
-func runFunction(command string) {
+func runFunction(command string, vars []RunFunctionVars) {
 	fmt.Println(command)
 
 	switch command {
@@ -66,5 +74,7 @@ func runFunction(command string) {
 		loadEnvFile()
 	case "print_all_env":
 		printAllEnv()
+	case "hello_world":
+		helloWorld(vars)
 	}
 }
