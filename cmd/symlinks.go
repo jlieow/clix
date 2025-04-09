@@ -97,7 +97,7 @@ func createSymLinksFromConfig(cmd *cobra.Command, args []string) {
 	}
 }
 
-func createSymLinks(cmd *cobra.Command, args []string) {
+func createSymLinks() {
 
 	fmt.Println(getGoPath())
 	fmt.Println(getGoModuleName())

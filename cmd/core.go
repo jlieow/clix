@@ -71,7 +71,7 @@ func runFunction(command string, vars []RunFunctionVars) {
 
 	switch command {
 	case "load_env_file":
-		loadEnvFile()
+		loadEnvFile(vars)
 	case "print_all_env":
 		printAllEnv()
 	case "hello_world":

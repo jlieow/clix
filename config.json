@@ -8,7 +8,13 @@
           "run_command": "ls"
         },
         {
-          "run_function": "load_env_file"
+          "run_function": "load_env_file",
+          "run_function_vars": [
+            {
+              "key": "dir",
+              "value": "./config/.env"
+            }
+          ]
         },
         {
           "run_command": "printenv"
