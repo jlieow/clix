@@ -18,7 +18,7 @@ func init() {
 var symlinkCmd = &cobra.Command{
 	Use:   "symlink",
 	Short: "Creates symlinks based on the config file.",
-	Long:  `Creates symlinks based on the config file located at xxx`,
+	Long:  `Creates symlinks based on the config file.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: createSymLinksFromConfig,
