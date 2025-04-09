@@ -58,11 +58,76 @@ Hooks are commands or functions that are executed before or after an alias. They
 #### Available Functions
 
 -   `set_env`: Sets environment variables.
+```
+{
+  "run_function": "set_env",
+  "run_function_vars": [
+    {
+      "key": "zzzzzzzzzzzzzzzzzz",
+      "value": "zzzzzzzzzzzzzzzzzz"
+    }
+  ]
+}
+```
 -   `load_env_file`: Loads environment variables from a file.
+
+````
+{
+  "run_function": "load_env_file",
+  "run_function_vars": [
+    {
+      "key": "dir",
+      "value": "./config/.env"
+    }
+  ]
+}
+````
 -   `print_all_env`: Prints all environment variables.
+````
+{
+  "run_function": "print_all_env"
+}
+````
 -   `hello_world`: Prints "Hello, world!".
+```
+{
+  "run_function": "hello_world",
+  "run_function_vars": [
+    {
+      "key": "name",
+      "value": "hello"
+    },
+    {
+      "key": "age",
+      "value": "21"
+    }
+  ]
+}
+```
 -   `run_python`: Runs a Python script.
+```
+{
+  "run_function": "run_python",
+  "run_function_vars": [
+    {
+      "key": "path",
+      "value": "testdata/main.py"
+    }
+  ]
+}
+```
 -   `run_javascript`: Runs a JavaScript script.
+```
+{
+  "run_function": "run_javascript",
+  "run_function_vars": [
+    {
+      "key": "path",
+      "value": "testdata/main.js"
+    }
+  ]
+}
+```
 
 ## Command Structure
 
