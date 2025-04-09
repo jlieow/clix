@@ -70,6 +70,8 @@ func runFunction(command string, vars []RunFunctionVars) {
 	fmt.Println(command)
 
 	switch command {
+	case "set_env":
+		setEnv(vars)
 	case "load_env_file":
 		loadEnvFile(vars)
 	case "print_all_env":

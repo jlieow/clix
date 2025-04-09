@@ -20,4 +20,5 @@ clix
 
 sudo ln -s ~/go/bin/clix /usr/local/bin/x
 sudo ln -s ~/go/bin/clix /usr/local/bin/t
+ln -s ~/go/bin/clix /usr/bin/t
 sudo alias x='~/go/bin/clix'

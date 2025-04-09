@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"syscall"
 
 	"github.com/spf13/cobra"
 )
@@ -61,6 +62,12 @@ func getGoPath() string {
 }
 
 func createSymLinksFromConfig(cmd *cobra.Command, args []string) {
+
+	// Check if the program is running as root (UID 0)
+	if syscall.Geteuid() != 0 {
+		fmt.Println("This program requires root privileges. Please run it with 'sudo'.")
+		return
+	}
 
 	go_path := getGoPath()
 	module_name, get_module_name_err := getGoModuleName()

@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"os/user"
 	"path/filepath"
 	"runtime"
 
@@ -35,10 +34,6 @@ type RunFunctionVars struct {
 
 // Task represents a task to perform before running the command
 type Hooks struct {
-	Task            string            `json:"task"`
-	EnvVars         map[string]string `json:"env_vars,omitempty"`
-	Message         string            `json:"message,omitempty"`
-	FilePath        string            `json:"file_path,omitempty"`
 	RunCommand      string            `json:"run_command,omitempty"`
 	RunFunction     string            `json:"run_function,omitempty"`
 	RunFunctionVars []RunFunctionVars `json:"run_function_vars,omitempty"`
@@ -57,40 +52,16 @@ type Config struct {
 	Commands map[string]Command `json:"commands"`
 }
 
-// Execute the task
-func executeTask(task Hooks) {
-	switch task.Task {
-	case "set_env":
-		// Set environment variables
-		for key, value := range task.EnvVars {
-			os.Setenv(key, value)
-			fmt.Printf("Setting environment variable: %s=%s\n", key, value)
-		}
-	case "log_message":
-		// Log a message
-		fmt.Println(task.Message)
-	case "check_file":
-		// Check if file exists
-		if _, err := os.Stat(task.FilePath); os.IsNotExist(err) {
-			fmt.Printf("Error: file not found: %s\n", task.FilePath)
-		} else {
-			fmt.Printf("File exists: %s\n", task.FilePath)
-		}
-	default:
-		fmt.Println("Unknown task:", task.Task)
-	}
-}
-
 // getConfigFilePath determines the platform-specific path for the config file
 func getConfigFilePath() string {
-	// Get the home directory of the current user
-	usr, err := user.Current()
+
+	// Get the home directory of the user
+	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		fmt.Println("Error getting current user:", err)
+		fmt.Println("Error retrieving home directory:", err)
 		return ""
 	}
 
-	homeDir := usr.HomeDir
 	var configDir string
 
 	// Determine the correct path based on the OS
@@ -334,32 +305,4 @@ func openFileInEditor(filePath string) error {
 	}
 
 	return nil
-}
-
-func main() {
-	// Read the config file using os.ReadFile instead of ioutil.ReadFile
-	configFile := "config.json"
-	fileContent, err := os.ReadFile(configFile)
-	if err != nil {
-		log.Fatalf("Error reading config file: %v", err)
-	}
-
-	// Unmarshal the JSON into a Config struct
-	var config Config
-	err = json.Unmarshal(fileContent, &config)
-	if err != nil {
-		log.Fatalf("Error unmarshalling JSON: %v", err)
-	}
-
-	// Process each command
-	for _, cmd := range config.Commands {
-		// Execute all tasks before running the actual command
-		for _, task := range cmd.PreHooks {
-			executeTask(task)
-		}
-
-		// After tasks are executed, run the CLI command
-		fmt.Printf("Executing command: %s\n", cmd.Command)
-		// Here you would actually run the command, for example using exec.Command
-	}
 }

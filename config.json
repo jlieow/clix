@@ -8,6 +8,15 @@
           "run_command": "ls"
         },
         {
+          "run_function": "set_env",
+          "run_function_vars": [
+            {
+              "key": "zzzzzzzzzzzzzzzzzz",
+              "value": "zzzzzzzzzzzzzzzzzz"
+            }
+          ]
+        },
+        {
           "run_function": "load_env_file",
           "run_function_vars": [
             {

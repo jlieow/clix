@@ -22,6 +22,20 @@ func helloWorld(vars []RunFunctionVars) {
 	fmt.Println("Hello " + name + " you are currently " + age)
 }
 
+func setEnv(vars []RunFunctionVars) error {
+	for _, v := range vars {
+
+		// Set environment variable
+		err := os.Setenv(v.Key, v.Value)
+		if err != nil {
+			return fmt.Errorf("Error setting environment variable: %s", err)
+		}
+
+	}
+
+	return nil
+}
+
 func loadEnvFile(vars []RunFunctionVars) error {
 
 	// Convert to map for easy lookup
