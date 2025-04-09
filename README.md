@@ -1,8 +1,10 @@
-# cliX
-A CLI extender.
+# clix
+clix stands for cli extender.
+
+Designed to enhance and extend the functionality of command-line interfaces (CLI). CliX empowers developers, system administrators, and power users by allowing them to define, 
+customize, and chain commands with ease.
 
 Used `cobra-cli init` to initialise a CLI structure. If you have not created a path to the go executables, run `~/go/bin/cobra-cli init`.
-
 
 Add GOPATH/bin directory to your PATH environment variable via `.bash_profile`, `.bashrc` or `.zshr` so you can run Go programs anywhere with `export PATH=$PATH:$(go env GOPATH)/bin`.
 
