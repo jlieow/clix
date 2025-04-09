@@ -1,0 +1,39 @@
+{
+  "commands": [
+    {
+      "name": "deploy",
+      "command": "terraform apply",
+      "tasks": [
+        {
+          "task": "set_env",
+          "env_vars": {
+            "AWS_REGION": "us-west-2",
+            "TF_VAR_environment": "production"
+          }
+        },
+        {
+          "task": "log_message",
+          "message": "Starting deployment with terraform"
+        },
+        {
+          "task": "check_file",
+          "file_path": "/path/to/config.tf"
+        }
+      ]
+    },
+    {
+      "name": "build",
+      "command": "go build",
+      "tasks": [
+        {
+          "task": "log_message",
+          "message": "Building the Go application"
+        },
+        {
+          "task": "check_file",
+          "file_path": "/path/to/main.go"
+        }
+      ]
+    }
+  ]
+}
