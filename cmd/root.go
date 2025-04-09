@@ -43,8 +43,7 @@ func Execute() {
 		command[0] = getConfigAliasCommand(alias)
 
 		// Use exec.Command and expand the array using '...' to pass individual arguments
-		// cmd := exec.Command(command[0], command[1:]...)
-		cmd := exec.Command("terraform")
+		cmd := exec.Command(command[0], command[1:]...)
 
 		// Capture the output of the command
 		output, _ := cmd.Output()

@@ -1,6 +1,6 @@
 {
   "commands": {
-    "q": {
+    "t": {
       "command": "terraform",
       "description": "",
       "prehooks": [

@@ -138,6 +138,8 @@ func getListConfigCommand() []string {
 	// Read the config file using os.ReadFile instead of ioutil.ReadFile
 	configPath := getConfigFilePath()
 
+	log.Printf("configPath: " + configPath)
+
 	fileContent, err := os.ReadFile(configPath)
 	if err != nil {
 		log.Fatalf("Error reading config file: %v", err)

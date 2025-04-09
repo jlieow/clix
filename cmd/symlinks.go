@@ -75,6 +75,8 @@ func createSymLinksFromConfig(cmd *cobra.Command, args []string) {
 
 	list_of_commands := getListConfigCommand()
 
+	log.Println(list_of_commands)
+
 	for _, command := range list_of_commands {
 		dst := "/usr/local/bin/" + command
 
@@ -95,35 +97,4 @@ func createSymLinksFromConfig(cmd *cobra.Command, args []string) {
 
 		log.Println("Symlink for " + command + " created successfully")
 	}
-}
-
-func createSymLinks() {
-
-	fmt.Println(getGoPath())
-	fmt.Println(getGoModuleName())
-
-	go_path := getGoPath()
-	module_name, get_module_name_err := getGoModuleName()
-	if get_module_name_err != nil {
-		log.Fatal(get_module_name_err)
-	}
-
-	clix_path := fmt.Sprintf("%s/bin/%s", go_path, module_name)
-
-	src := clix_path
-	dst := "/usr/local/bin/q"
-
-	// Removes symlink to remove any previous links
-	remove_err := os.Remove(dst)
-	if remove_err != nil {
-		log.Fatal(remove_err)
-	}
-
-	// Creates symlinks
-	create_err := os.Symlink(src, dst)
-	if create_err != nil {
-		log.Fatalf("Error creating symlink: %v", create_err)
-	}
-
-	log.Println("Symlink created successfully")
 }
