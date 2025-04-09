@@ -1,4 +1,4 @@
-package cmd
+package util
 
 import (
 	"encoding/json"
@@ -8,23 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
-
-	"github.com/spf13/cobra"
 )
-
-func init() {
-	rootCmd.AddCommand(config)
-	config.Flags().BoolP("write", "w", false, "Opens up the config file for editing.")
-}
-
-var config = &cobra.Command{
-	Use:   "config",
-	Short: "Performs operations on the config file.",
-	Long:  `Performs operations on the config file.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	Run: returnConfigFile,
-}
 
 // RunFunctionVars represents the variables associated with a run_function
 type RunFunctionVars struct {
@@ -52,8 +36,8 @@ type Config struct {
 	Commands map[string]Command `json:"commands"`
 }
 
-// getConfigFilePath determines the platform-specific path for the config file
-func getConfigFilePath() string {
+// GetConfigFilePath determines the platform-specific path for the config file
+func GetConfigFilePath() string {
 
 	// Get the home directory of the user
 	homeDir, err := os.UserHomeDir()
@@ -80,34 +64,34 @@ func getConfigFilePath() string {
 	return configDir
 }
 
-func returnConfigFile(cmd *cobra.Command, args []string) {
+// func returnConfigFile() {
 
+// 	// Read the config file using os.ReadFile instead of ioutil.ReadFile
+// 	configPath := GetConfigFilePath()
+
+// 	write_flag, err := cmd.Flags().GetBool("write")
+
+// 	if write_flag {
+// 		// Open the file in the chosen editor
+// 		if err := OpenFileInEditor(configPath); err != nil {
+// 			fmt.Println("Error:", err)
+// 		} else {
+// 			fmt.Println("File opened successfully for editing.")
+// 		}
+// 		return
+// 	}
+
+// 	fileContent, err := os.ReadFile(configPath)
+// 	if err != nil {
+// 		log.Fatalf("Error reading config file: %v", err)
+// 	}
+
+// 	fmt.Printf(string(fileContent))
+// }
+
+func GetListConfigCommand() []string {
 	// Read the config file using os.ReadFile instead of ioutil.ReadFile
-	configPath := getConfigFilePath()
-
-	write_flag, err := cmd.Flags().GetBool("write")
-
-	if write_flag {
-		// Open the file in the chosen editor
-		if err := openFileInEditor(configPath); err != nil {
-			fmt.Println("Error:", err)
-		} else {
-			fmt.Println("File opened successfully for editing.")
-		}
-		return
-	}
-
-	fileContent, err := os.ReadFile(configPath)
-	if err != nil {
-		log.Fatalf("Error reading config file: %v", err)
-	}
-
-	fmt.Printf(string(fileContent))
-}
-
-func getListConfigCommand() []string {
-	// Read the config file using os.ReadFile instead of ioutil.ReadFile
-	configPath := getConfigFilePath()
+	configPath := GetConfigFilePath()
 
 	log.Printf("configPath: " + configPath)
 
@@ -133,9 +117,9 @@ func getListConfigCommand() []string {
 	return keys
 }
 
-func getConfigAlias(command string) {
+func GetConfigAlias(command string) {
 	// Read the config file using os.ReadFile instead of ioutil.ReadFile
-	configPath := getConfigFilePath()
+	configPath := GetConfigFilePath()
 
 	fileContent, err := os.ReadFile(configPath)
 	if err != nil {
@@ -159,9 +143,9 @@ func getConfigAlias(command string) {
 	}
 }
 
-func getConfigAliasCommand(command string) string {
+func GetConfigAliasCommand(command string) string {
 	// Read the config file using os.ReadFile instead of ioutil.ReadFile
-	configPath := getConfigFilePath()
+	configPath := GetConfigFilePath()
 
 	fileContent, err := os.ReadFile(configPath)
 	if err != nil {
@@ -181,9 +165,9 @@ func getConfigAliasCommand(command string) string {
 	return config.Commands[command].Command
 }
 
-func getConfigAliasHooks(command string, hooktype string) []Hooks {
+func GetConfigAliasHooks(command string, hooktype string) []Hooks {
 	// Read the config file using os.ReadFile instead of ioutil.ReadFile
-	configPath := getConfigFilePath()
+	configPath := GetConfigFilePath()
 
 	fileContent, err := os.ReadFile(configPath)
 	if err != nil {
@@ -210,10 +194,10 @@ func getConfigAliasHooks(command string, hooktype string) []Hooks {
 	return []Hooks{}
 }
 
-// createConfigFile creates a configuration file at the determined path
-func createConfigFile() {
+// CreateConfigFile creates a configuration file at the determined path
+func CreateConfigFile() {
 	// Get the config file path
-	configPath := getConfigFilePath()
+	configPath := GetConfigFilePath()
 
 	// Ensure the config file path is valid
 	if configPath == "" {
@@ -279,7 +263,7 @@ func createConfigFile() {
 	fmt.Printf("Config file created successfully at: %s\n", configPath)
 }
 
-func openFileInEditor(filePath string) error {
+func OpenFileInEditor(filePath string) error {
 	var editorCommand string
 
 	// Choose the editor based on the operating system

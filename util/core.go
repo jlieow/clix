@@ -1,4 +1,4 @@
-package cmd
+package util
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ func isZero(v reflect.Value) bool {
 	return reflect.DeepEqual(v.Interface(), reflect.Zero(v.Type()).Interface())
 }
 
-func runHooks(hooks []Hooks) {
+func RunHooks(hooks []Hooks) {
 	for _, hook := range hooks {
 
 		if hook.RunCommand != "" && hook.RunFunction != "" {

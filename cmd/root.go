@@ -6,10 +6,11 @@ import (
 	"os/exec"
 
 	"github.com/spf13/cobra"
+	"clix/util"
 )
 
-// rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
+// RootCmd represents the base command when called without any subcommands
+var RootCmd = &cobra.Command{
 	Use: "clix",
 	CompletionOptions: cobra.CompletionOptions{
 		HiddenDefaultCmd: true, // hides cmd as described here: https://github.com/spf13/cobra/blob/main/site/content/completions/_index.md#adapting-the-default-completion-command
@@ -25,7 +26,7 @@ customize, and chain commands with ease.`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
+// This is called by main.main(). It only needs to happen once to the RootCmd.
 // Also creates a directory with config files
 func Execute() {
 
@@ -34,13 +35,13 @@ func Execute() {
 	alias := os.Args[0]
 	if alias != "clix" {
 
-		getConfigAlias(alias)
+		util.GetConfigAlias(alias)
 
-		preHooks := getConfigAliasHooks(alias, "prehook")
-		runHooks(preHooks)
+		preHooks := util.GetConfigAliasHooks(alias, "prehook")
+		util.RunHooks(preHooks)
 
 		command := os.Args
-		command[0] = getConfigAliasCommand(alias)
+		command[0] = util.GetConfigAliasCommand(alias)
 
 		// Use exec.Command and expand the array using '...' to pass individual arguments
 		cmd := exec.Command(command[0], command[1:]...)
@@ -54,15 +55,15 @@ func Execute() {
 		// Print the output of the command
 		fmt.Println(string(output))
 
-		postHooks := getConfigAliasHooks(alias, "posthook")
-		runHooks(postHooks)
+		postHooks := util.GetConfigAliasHooks(alias, "posthook")
+		util.RunHooks(postHooks)
 
 		return
 	}
 
-	createConfigFile()
+	util.CreateConfigFile()
 
-	err := rootCmd.Execute()
+	err := RootCmd.Execute()
 	if err != nil {
 		os.Exit(1)
 	}
@@ -73,9 +74,9 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.clix.yaml)")
+	// RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.clix.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
