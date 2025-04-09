@@ -4,6 +4,16 @@
 
 CliX is a command-line tool designed to enhance and extend the functionality of existing command-line interfaces (CLIs). It allows users to define, customize, and chain commands with ease, empowering developers, system administrators, and power users to streamline their workflows.
 
+## Motivation
+
+### Combine Multiple Tools into a Single Call
+
+Multiple tools are often executed together to accomplish a specific goal; for example, activating a virtual environment before executing a Python script. Tools might also not come with built-in features that would improve workflow, such as exporting environmental variables before applying a Terraform script. Storing complex commands in text files becomes messy as project complexity increases. CliX attempts to streamline this by allowing users to combine multiple commands into a single one.
+
+### Not CLI Specific
+
+Creating custom CLI extenders is an option, but it becomes difficult to maintain with the release of new subcommands. CliX allows for the underlying CLI to be continuously upgraded.
+
 ## Features
 
 -   **Command Aliasing:** Create custom aliases for frequently used commands.
