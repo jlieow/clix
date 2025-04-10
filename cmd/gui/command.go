@@ -23,6 +23,6 @@ var guiCmd = &cobra.Command{
 func command(cmd *cobra.Command, args []string) {
 
 	config_file_path := "file://" + util.GetConfigFilePath()
-	util.OpenConfigJsonInTabs(config_file_path)
+	util.Gui(config_file_path, "config")
 
 }
