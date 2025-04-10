@@ -7,12 +7,14 @@ import (
 
 	"clix/cmd"
 	"clix/util"
+
 	"github.com/spf13/cobra"
 )
 
 func init() {
 	cmd.RootCmd.AddCommand(config)
-	config.Flags().BoolP("write", "w", false, "Opens up the config file for editing.")
+	config.Flags().BoolP("edit", "e", false, "Opens up the config.json in a terminal for editing.")
+	config.Flags().BoolP("gui", "g", false, "Open the config.json in a GUI for editing.")
 }
 
 var config = &cobra.Command{
@@ -29,11 +31,23 @@ func command(cmd *cobra.Command, args []string) {
 	// Read the config file using os.ReadFile instead of ioutil.ReadFile
 	configPath := util.GetConfigFilePath()
 
-	write_flag, err := cmd.Flags().GetBool("write")
+	edit_flag, err := cmd.Flags().GetBool("edit")
+	gui_flag, err := cmd.Flags().GetBool("gui")
 
-	// If write flag seen, open the file in editor based on the operating system
-	if write_flag {
+	// If edit flag seen, open the file in editor based on the operating system
+	if edit_flag {
 		if err := util.OpenFileInEditor(configPath); err != nil {
+			fmt.Println("Error:", err)
+		} else {
+			fmt.Println("File opened successfully for editing.")
+		}
+		return
+	}
+
+	// If GUI flag seen, open the file in a GUI for editing
+	if gui_flag {
+		config_file_path := "file://" + util.GetConfigFilePath()
+		if err := util.OpenConfigJsonInGui(config_file_path); err != nil {
 			fmt.Println("Error:", err)
 		} else {
 			fmt.Println("File opened successfully for editing.")
