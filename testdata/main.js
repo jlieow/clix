@@ -1,2 +1,2 @@
-// the hello world program
-console.log('Hello World from JavaScript file!');
+process.env['javascriptjavascriptjavascriptjavascript'] = 'javascriptjavascriptjavascriptjavascript';
+console.log(process.env.javascriptjavascriptjavascriptjavascript);

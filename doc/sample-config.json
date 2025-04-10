@@ -60,6 +60,9 @@
               "value": "testdata/main.js"
             }
           ]
+        },
+        {
+          "run_command": "printenv"
         }
       ]
     }

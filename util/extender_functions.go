@@ -79,12 +79,12 @@ func isPythonScript(path string) (bool, error) {
 	info, err := os.Stat(path)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return false, fmt.Errorf("file does not exist")
+			return false, fmt.Errorf("File does not exist")
 		}
 		return false, err
 	}
 	if info.IsDir() {
-		return false, fmt.Errorf("path is a directory, not a file")
+		return false, fmt.Errorf("Path is a directory, not a file")
 	}
 
 	// Check if the file has a .py extension
@@ -153,12 +153,12 @@ func isJavaScriptScript(path string) (bool, error) {
 	info, err := os.Stat(path)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return false, fmt.Errorf("file does not exist")
+			return false, fmt.Errorf("File does not exist")
 		}
 		return false, err
 	}
 	if info.IsDir() {
-		return false, fmt.Errorf("path is a directory, not a file")
+		return false, fmt.Errorf("Path is a directory, not a file")
 	}
 
 	// Check if the file has a .js extension

@@ -1,1 +1,3 @@
-print("helloworld from Python file!")
+import os
+os.environ["pythonpythonpythonpython"] = "pythonpythonpythonpython"
+print(os.environ["pythonpythonpythonpython"])
