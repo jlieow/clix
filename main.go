@@ -6,8 +6,7 @@ package main
 import (
 	"clix/cmd"
 	_ "clix/cmd/config"
-
-	// _ "clix/cmd/gui"
+	_ "clix/cmd/gui"
 	_ "clix/cmd/symlink"
 )
 

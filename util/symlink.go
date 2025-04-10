@@ -81,7 +81,7 @@ func CreateSymLinksFromConfig() {
 		os.MkdirAll(targetDir, 0755)
 	}
 
-	list_of_commands := GetListConfigCommand()
+	list_of_commands := GetListConfigAlias()
 
 	log.Println(list_of_commands)
 

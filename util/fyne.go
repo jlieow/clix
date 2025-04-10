@@ -1,9 +1,12 @@
 package util
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
+	"strings"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -125,4 +128,135 @@ func OpenConfigJsonInGui(uriStr string) error {
 	myWindow.ShowAndRun()
 
 	return nil
+}
+
+func OpenConfigJsonInTabs(uriStr string) {
+
+	myApp := app.New()
+	myWindow := myApp.NewWindow("Clix Config File")
+
+	aliases := GetListConfigAlias()
+
+	if len(aliases) == 0 {
+
+		config_file_path := strings.Replace(uriStr, "file://", "", -1)
+
+		multilineString := `No aliases found. 
+Please check your config file located at ` + config_file_path
+
+		display := widget.NewLabel(multilineString)
+		myWindow.SetContent(container.NewBorder(nil, nil, nil, nil, display)) // top, bottom, left, right, center
+
+		myWindow.Resize(fyne.NewSize(500, 400))
+		myWindow.ShowAndRun()
+	}
+
+	var tabs []*container.TabItem
+	for _, alias := range aliases {
+
+		command_struct := GetConfigAliasValue(alias)
+
+		// Marshal struct into a JSON object
+		data, err := json.Marshal(command_struct) // `command` is your Command struct
+		if err != nil {
+			panic(err)
+		}
+
+		// Format JSON
+		var out bytes.Buffer
+		err = json.Indent(&out, []byte(data), "", "  ")
+		if err != nil {
+			panic(err)
+		}
+		// Save the formatted JSON to a variable
+		formattedJSON := out.String()
+
+		textBox := widget.NewMultiLineEntry()
+		textBox.SetText(formattedJSON)
+		tabs = append(tabs, container.NewTabItem(alias, textBox))
+	}
+
+	tabContainer := container.NewAppTabs(tabs...)
+	tabContainer.SetTabLocation(container.TabLocationLeading)
+
+	// Save file function called by saveBtn
+	saveFile := func() {
+
+		cfg := Config{
+			Commands: make(map[string]Command),
+		}
+
+		// Access the tabs manually
+		// Grab the tab's text and content to recreate the config file to save
+		for i, tab := range tabs {
+			commandKey := tab.Text
+			textBox := tab.Content.(*widget.Entry)
+			commandJSON := textBox.Text
+			fmt.Printf("Tab %d: %s\n", i+1, tab.Text)
+			fmt.Printf("Tab %d Content: %s\n", i+1, textBox.Text)
+
+			var command Command
+			err := json.Unmarshal([]byte(commandJSON), &command)
+			if err != nil {
+				log.Printf("Error unmarshaling JSON for command %s: %v", commandKey, err)
+				dialog.ShowError(err, myWindow)
+				return
+			}
+
+			cfg.Commands[commandKey] = command
+		}
+
+		jsonBytes, err := json.MarshalIndent(cfg, "", "  ")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		uri, err := storage.ParseURI(uriStr)
+		if err != nil {
+			log.Println("Failed to parse URI:", err)
+			return
+		}
+
+		writer, err := storage.Writer(uri)
+		if err != nil {
+			log.Println("Failed to open file for writing:", err)
+			return
+		}
+		defer writer.Close()
+
+		_, err = writer.Write(jsonBytes)
+		if err != nil {
+			log.Println("Failed to write to file:", err)
+			return
+		}
+
+		// Show success message
+		dialog.ShowInformation("Success", "File saved successfully", myWindow)
+		log.Println("File saved successfully.")
+	}
+
+	saveBtn := widget.NewButton("Save", saveFile)
+
+	myWindow.SetContent(container.NewBorder(nil, saveBtn, nil, nil, tabContainer)) // top, bottom, left, right, center
+
+	myWindow.Resize(fyne.NewSize(500, 400))
+	myWindow.ShowAndRun()
+}
+
+func recreateConfig(alias string, commandJSON string) (Config, error) {
+	var command Command
+	err := json.Unmarshal([]byte(commandJSON), &command)
+	if err != nil {
+		return Config{}, err
+	}
+
+	commandsMap := map[string]Command{
+		alias: command,
+	}
+
+	config := Config{
+		Commands: commandsMap,
+	}
+
+	return config, nil
 }

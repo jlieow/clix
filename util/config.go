@@ -64,7 +64,7 @@ func GetConfigFilePath() string {
 	return configDir
 }
 
-func GetListConfigCommand() []string {
+func GetListConfigAlias() []string {
 	// Read the config file using os.ReadFile instead of ioutil.ReadFile
 	configPath := GetConfigFilePath()
 
@@ -90,6 +90,28 @@ func GetListConfigCommand() []string {
 	}
 
 	return keys
+}
+
+func GetConfigAliasValue(command string) Command {
+	// Read the config file using os.ReadFile instead of ioutil.ReadFile
+	configPath := GetConfigFilePath()
+
+	fileContent, err := os.ReadFile(configPath)
+	if err != nil {
+		log.Fatalf("Error reading config file: %v", err)
+	}
+
+	// Declare a Config object to hold the parsed data
+	var config Config
+
+	// Parse the JSON string into the config object
+	err = json.Unmarshal([]byte(fileContent), &config)
+	if err != nil {
+		log.Fatal("Error parsing JSON: ", err)
+	}
+
+	// Return an empty slice of Hooks
+	return config.Commands[command]
 }
 
 func GetConfigAlias(command string) error {
