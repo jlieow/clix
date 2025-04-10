@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
+	"runtime"
 	"strings"
 	"syscall"
-	
-	"github.com/spf13/cobra"
 )
 
 // GetGoModuleName reads the go.mod file in the current directory
@@ -48,7 +48,7 @@ func GetGoPath() string {
 	return home + "/go"
 }
 
-func createSymLinksFromConfig(cmd *cobra.Command, args []string) {
+func CreateSymLinksFromConfig() {
 
 	// Check if the program is running as root (UID 0)
 	if syscall.Geteuid() != 0 {
@@ -65,23 +65,31 @@ func createSymLinksFromConfig(cmd *cobra.Command, args []string) {
 	clix_path := fmt.Sprintf("%s/bin/%s", go_path, module_name)
 
 	src := clix_path
-	// dst := "/usr/local/bin/q"
+
+	var targetDir string
+
+	// Determine the correct path based on the OS
+	switch runtime.GOOS {
+	case "windows":
+		targetDir = filepath.Join(os.Getenv("USERPROFILE"), "bin")
+	default:
+		targetDir = "/usr/local/bin"
+	}
+
+	// Create target directory if needed (Windows case)
+	if runtime.GOOS == "windows" {
+		os.MkdirAll(targetDir, 0755)
+	}
 
 	list_of_commands := GetListConfigCommand()
 
 	log.Println(list_of_commands)
 
 	for _, command := range list_of_commands {
-		dst := "/usr/local/bin/" + command
+		dst := filepath.Join(targetDir, command)
 
-		// Checks if file exists
-		// If it does, removes symlink to remove any previous links
-		if _, err := os.Stat(dst); err == nil {
-			remove_err := os.Remove(dst)
-			if remove_err != nil {
-				log.Fatal(remove_err)
-			}
-		}
+		// Remove old symlink if it exists
+		os.Remove(dst)
 
 		// Creates symlinks
 		create_err := os.Symlink(src, dst)

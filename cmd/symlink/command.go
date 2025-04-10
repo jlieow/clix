@@ -1,13 +1,9 @@
 package symlink
 
 import (
-	"fmt"
-	"log"
-	"os"
-	"syscall"
-
 	"clix/cmd"
 	"clix/util"
+
 	"github.com/spf13/cobra"
 )
 
@@ -21,7 +17,7 @@ var symlinkCmd = &cobra.Command{
 	Long:  `Creates symlinks based on the config file.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	Run: createSymLinksFromConfig,
+	Run: command,
 }
 
 // // GetGoModuleName reads the go.mod file in the current directory
@@ -61,47 +57,7 @@ var symlinkCmd = &cobra.Command{
 // 	return home + "/go"
 // }
 
-func createSymLinksFromConfig(cmd *cobra.Command, args []string) {
+func command(cmd *cobra.Command, args []string) {
 
-	// Check if the program is running as root (UID 0)
-	if syscall.Geteuid() != 0 {
-		fmt.Println("This program requires root privileges. Please run it with 'sudo'.")
-		return
-	}
-
-	go_path := util.GetGoPath()
-	module_name, get_module_name_err := util.GetGoModuleName()
-	if get_module_name_err != nil {
-		log.Fatal(get_module_name_err)
-	}
-
-	clix_path := fmt.Sprintf("%s/bin/%s", go_path, module_name)
-
-	src := clix_path
-	// dst := "/usr/local/bin/q"
-
-	list_of_commands := util.GetListConfigCommand()
-
-	log.Println(list_of_commands)
-
-	for _, command := range list_of_commands {
-		dst := "/usr/local/bin/" + command
-
-		// Checks if file exists
-		// If it does, removes symlink to remove any previous links
-		if _, err := os.Stat(dst); err == nil {
-			remove_err := os.Remove(dst)
-			if remove_err != nil {
-				log.Fatal(remove_err)
-			}
-		}
-
-		// Creates symlinks
-		create_err := os.Symlink(src, dst)
-		if create_err != nil {
-			log.Fatalf("Error creating symlink: %v", create_err)
-		}
-
-		log.Println("Symlink for " + command + " created successfully")
-	}
+	util.CreateSymLinksFromConfig()
 }

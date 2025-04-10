@@ -5,8 +5,9 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/spf13/cobra"
 	"clix/util"
+
+	"github.com/spf13/cobra"
 )
 
 // RootCmd represents the base command when called without any subcommands
@@ -30,12 +31,14 @@ customize, and chain commands with ease.`,
 // Also creates a directory with config files
 func Execute() {
 
-	fmt.Println("Command used to run the program:", os.Args)
-
 	alias := os.Args[0]
 	if alias != "clix" {
 
-		util.GetConfigAlias(alias)
+		err := util.GetConfigAlias(alias)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
 		preHooks := util.GetConfigAliasHooks(alias, "prehook")
 		util.RunHooks(preHooks)
@@ -46,14 +49,24 @@ func Execute() {
 		// Use exec.Command and expand the array using '...' to pass individual arguments
 		cmd := exec.Command(command[0], command[1:]...)
 
-		// Capture the output of the command
-		output, _ := cmd.Output()
+		cmd.Stdin = os.Stdin   // Connects to terminal input
+		cmd.Stdout = os.Stdout // Outputs to terminal
+		cmd.Stderr = os.Stderr // Error output to terminal
+		cmd.Run()
+
+		// err = cmd.Run()
 		// if err != nil {
-		// 	log.Fatal(err)
+		// 	fmt.Println(err)
 		// }
 
-		// Print the output of the command
-		fmt.Println(string(output))
+		// // Capture the output of the command
+		// output, _ := cmd.Output()
+		// // if err != nil {
+		// // 	log.Fatal(err)
+		// // }
+
+		// // Print the output of the command
+		// fmt.Println(string(output))
 
 		postHooks := util.GetConfigAliasHooks(alias, "posthook")
 		util.RunHooks(postHooks)

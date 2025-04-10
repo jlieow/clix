@@ -92,13 +92,13 @@ func GetListConfigCommand() []string {
 	return keys
 }
 
-func GetConfigAlias(command string) {
+func GetConfigAlias(command string) error {
 	// Read the config file using os.ReadFile instead of ioutil.ReadFile
 	configPath := GetConfigFilePath()
 
 	fileContent, err := os.ReadFile(configPath)
 	if err != nil {
-		log.Fatalf("Error reading config file: %v", err)
+		return fmt.Errorf("Error reading config file: %v", err)
 	}
 
 	// Declare a Config object to hold the parsed data
@@ -107,15 +107,17 @@ func GetConfigAlias(command string) {
 	// Parse the JSON string into the config object
 	err = json.Unmarshal([]byte(fileContent), &config)
 	if err != nil {
-		log.Fatal("Error parsing JSON: ", err)
+		return fmt.Errorf("Error parsing JSON: %v", err)
 	}
 
 	// Extract command "q"
-	if cmd, exists := config.Commands[command]; exists {
-		fmt.Println("Command:", cmd)
+	if _, exists := config.Commands[command]; exists {
+		fmt.Println("Running clix...")
 	} else {
-		fmt.Println("Command not found in config")
+		return fmt.Errorf("Command not found in config")
 	}
+
+	return nil
 }
 
 func GetConfigAliasCommand(command string) string {

@@ -1,0 +1,19 @@
+{
+  "commands": {
+    "t": {
+      "command": "terraform",
+      "description": "",
+      "prehooks": [
+        {
+          "run_function": "load_env_file",
+          "run_function_vars": [
+            {
+              "key": "dir",
+              "value": "./config/.env"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
