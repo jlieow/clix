@@ -21,6 +21,5 @@ var symlinkCmd = &cobra.Command{
 }
 
 func command(cmd *cobra.Command, args []string) {
-
 	util.CreateSymLinksFromConfig()
 }

@@ -57,12 +57,8 @@ func CreateSymLinksFromConfig() {
 	}
 
 	go_path := GetGoPath()
-	module_name, get_module_name_err := GetGoModuleName()
-	if get_module_name_err != nil {
-		log.Fatal(get_module_name_err)
-	}
 
-	clix_path := fmt.Sprintf("%s/bin/%s", go_path, module_name)
+	clix_path := fmt.Sprintf("%s/bin/%s", go_path, StaticModuleName)
 
 	src := clix_path
 
@@ -107,6 +103,6 @@ func CreateSymLinksFromConfig() {
 			log.Fatalf("Error creating symlink: %v", create_err)
 		}
 
-		log.Println("Symlink for " + command + " created successfully")
+		log.Println("Symlink for " + command + " created successfully at path: " + dst)
 	}
 }

@@ -43,8 +43,8 @@ func Gui(configJsonUriStr string, settingsJsonUriStr string, selectTab string) {
 
 	// Create the tabs and assign their labels and content
 	configTab := container.NewTabItem("Config", tab1Content)
-	configJsonTab := container.NewTabItem("Config JSON", tab2Content)
-	settingsJsonTab := container.NewTabItem("Settings JSON", tab3Content)
+	configJsonTab := container.NewTabItem("config.json", tab2Content)
+	settingsJsonTab := container.NewTabItem("settings.json", tab3Content)
 
 	// Create an AppTabs container that holds all the tabs
 	tabContainer := container.NewAppTabs(configTab, configJsonTab, settingsJsonTab)
