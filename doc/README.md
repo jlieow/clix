@@ -135,6 +135,8 @@ The `clix` command has the following structure:
 
 -   `clix`: The main command.
 -   `cmd/config`: Contains configuration related commands.
+-   `cmd/gui`: Contains GUI related commands.
+-   `cmd/settings`: Contains settings related commands.
 -   `cmd/symlink`: Contains symlink related commands.
 -   `Execute()`: Adds all child commands to the root command and sets flags appropriately. This is called by `main.main()`. It also creates a directory with config files.
 
@@ -145,6 +147,10 @@ The configuration file (`config.json`) is stored in the `$HOME/.clix` directory.
 ## Contributing
 
 Contributions are welcome! Please submit a pull request with your changes.
+
+## Code of Conduct
+
+Please adhere to this project's [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 
