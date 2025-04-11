@@ -52,10 +52,10 @@ func GetConfigFilePath() string {
 	switch runtime.GOOS {
 	case "linux", "darwin":
 		// For Linux/macOS, store in ~/.config/myapp/config.json
-		configDir = filepath.Join(homeDir, ".config", "clix", "config.json")
+		configDir = filepath.Join(homeDir, ".config", "clix", StaticConfigJsonFileName)
 	case "windows":
 		// For Windows, store in C:\Users\<username>\AppData\Roaming\MyApp\config.json
-		configDir = filepath.Join(homeDir, "AppData", "Roaming", "CliX", "config.json")
+		configDir = filepath.Join(homeDir, "AppData", "Roaming", "CliX", StaticConfigJsonFileName)
 	default:
 		fmt.Println("Unsupported OS")
 		return ""
@@ -67,8 +67,6 @@ func GetConfigFilePath() string {
 func GetListConfigAlias() []string {
 	// Read the config file using os.ReadFile instead of ioutil.ReadFile
 	configPath := GetConfigFilePath()
-
-	log.Printf("configPath: " + configPath)
 
 	fileContent, err := os.ReadFile(configPath)
 	if err != nil {
@@ -211,9 +209,9 @@ func CreateConfigFile() {
 		return
 	}
 
+	// File exists, skip the rest of the function
 	if _, err := os.Stat(configPath); err == nil {
-		// File exists, skip the rest of the function
-		fmt.Println("File already exists, skipping the rest of the function.")
+		// fmt.Println("config.json already exists, skipping creation.")
 		return
 	}
 

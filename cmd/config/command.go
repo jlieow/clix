@@ -47,11 +47,14 @@ func command(cmd *cobra.Command, args []string) {
 	// If GUI flag seen, open the file in a GUI for editing
 	if gui_flag {
 		config_file_path := "file://" + util.GetConfigFilePath()
-		if err := util.OpenConfigJsonInGui(config_file_path); err != nil {
-			fmt.Println("Error:", err)
-		} else {
-			fmt.Println("File opened successfully for editing.")
-		}
+		settings_file_path := "file://" + util.GetSettingsFilePath()
+		util.Gui(config_file_path, settings_file_path, util.StaticConfigJson)
+
+		// if err := util.OpenConfigJsonInGui(config_file_path); err != nil {
+		// 	fmt.Println("Error:", err)
+		// } else {
+		// 	fmt.Println("File opened successfully for editing.")
+		// }
 		return
 	}
 

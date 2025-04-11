@@ -66,19 +66,29 @@ func CreateSymLinksFromConfig() {
 
 	src := clix_path
 
-	var targetDir string
+	var symlink_path string
 
 	// Determine the correct path based on the OS
 	switch runtime.GOOS {
 	case "windows":
-		targetDir = filepath.Join(os.Getenv("USERPROFILE"), "bin")
+		symlink_path = filepath.Join(os.Getenv("USERPROFILE"), "bin")
 	default:
-		targetDir = "/usr/local/bin"
+		symlink_path = "/usr/local/bin"
+	}
+
+	// If User has defined a symlink_path in settings.json use it
+	settings_symlink_path_value, err := GetSettingsValue("symlink_path")
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+
+	if settings_symlink_path_value != "" {
+		symlink_path = settings_symlink_path_value
 	}
 
 	// Create target directory if needed (Windows case)
 	if runtime.GOOS == "windows" {
-		os.MkdirAll(targetDir, 0755)
+		os.MkdirAll(symlink_path, 0755)
 	}
 
 	list_of_commands := GetListConfigAlias()
@@ -86,7 +96,7 @@ func CreateSymLinksFromConfig() {
 	log.Println(list_of_commands)
 
 	for _, command := range list_of_commands {
-		dst := filepath.Join(targetDir, command)
+		dst := filepath.Join(symlink_path, command)
 
 		// Remove old symlink if it exists
 		os.Remove(dst)

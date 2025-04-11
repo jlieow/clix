@@ -75,6 +75,7 @@ func Execute() {
 	}
 
 	util.CreateConfigFile()
+	util.CreateSettingsFile()
 
 	err := RootCmd.Execute()
 	if err != nil {

@@ -31,35 +31,40 @@ func SampleGUI() {
 	w.ShowAndRun()
 }
 
-func Gui(uriStr string, selectTab string) {
+func Gui(configJsonUriStr string, settingsJsonUriStr string, selectTab string) {
 	// Create a new Fyne app
 	myApp := app.New()
 	myWindow := myApp.NewWindow("CliX (Cli eXtender)")
 
 	// Create content for each tab
-	tab1Content := TabConfigContent(uriStr, myWindow)
-	tab2Content := TabJsonContent(uriStr, myWindow)
+	tab1Content := TabConfigContent(configJsonUriStr, myWindow)
+	tab2Content := TabJsonContent(configJsonUriStr, myWindow)
+	tab3Content := TabJsonContent(settingsJsonUriStr, myWindow)
 
 	// Create the tabs and assign their labels and content
 	configTab := container.NewTabItem("Config", tab1Content)
-	jsonTab := container.NewTabItem("JSON", tab2Content)
+	configJsonTab := container.NewTabItem("Config JSON", tab2Content)
+	settingsJsonTab := container.NewTabItem("Settings JSON", tab3Content)
 
 	// Create an AppTabs container that holds all the tabs
-	tabContainer := container.NewAppTabs(configTab, jsonTab)
+	tabContainer := container.NewAppTabs(configTab, configJsonTab, settingsJsonTab)
 
 	// Set the initial tab
 	switch selectTab {
-	case "config":
+	case StaticConfig:
 		tabContainer.Select(configTab)
-	case "json":
-		tabContainer.Select(jsonTab)
+	case StaticConfigJson:
+		tabContainer.Select(configJsonTab)
+	case StaticSettingsJson:
+		tabContainer.Select(settingsJsonTab)
 	}
 
 	// When user updates the config file to keep both tabs content consistent,
 	// update the contents of the tab when selected
 	tabContainer.OnSelected = func(item *container.TabItem) {
-		configTab.Content = TabConfigContent(uriStr, myWindow)
-		jsonTab.Content = TabJsonContent(uriStr, myWindow)
+		configTab.Content = TabConfigContent(configJsonUriStr, myWindow)
+		configJsonTab.Content = TabJsonContent(configJsonUriStr, myWindow)
+		settingsJsonTab.Content = TabJsonContent(settingsJsonUriStr, myWindow)
 	}
 
 	// Set the content of the window to be the tab container

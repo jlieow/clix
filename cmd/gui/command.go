@@ -23,6 +23,7 @@ var guiCmd = &cobra.Command{
 func command(cmd *cobra.Command, args []string) {
 
 	config_file_path := "file://" + util.GetConfigFilePath()
-	util.Gui(config_file_path, "config")
+	settings_file_path := "file://" + util.GetSettingsFilePath()
+	util.Gui(config_file_path, settings_file_path, util.StaticConfig)
 
 }
