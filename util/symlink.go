@@ -56,9 +56,10 @@ func CreateSymLinksFromConfig() {
 		return
 	}
 
-	go_path := GetGoPath()
+	// go_path := GetGoPath()
+	// clix_path := fmt.Sprintf("%s/bin/%s", go_path, StaticModuleName)
 
-	clix_path := fmt.Sprintf("%s/bin/%s", go_path, StaticModuleName)
+	clix_path := fmt.Sprintf("/usr/local/bin/%s", StaticModuleName)
 
 	src := clix_path
 
@@ -104,5 +105,8 @@ func CreateSymLinksFromConfig() {
 		}
 
 		log.Println("Symlink for " + command + " created successfully at path: " + dst)
+
+		log.Println("src: " + src)
+		log.Println("dst: " + dst)
 	}
 }
