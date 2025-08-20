@@ -104,5 +104,8 @@ func CreateSymLinksFromConfig() {
 		}
 
 		log.Println("Symlink for " + command + " created successfully at path: " + dst)
+
+		log.Println("src: " + src)
+		log.Println("dst: " + dst)
 	}
 }
