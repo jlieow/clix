@@ -43,6 +43,37 @@ Creating custom CLI extenders is an option, but it becomes difficult to maintain
 
 ## Usage
 
+### config.json
+
+| Key        | Description               |
+|------------|---------------------------|
+t | the alias
+command | the command to run when alias is called
+| prehooks   | run pre command execution |
+| posthooks  | run post command execution |
+```
+{
+  "commands": {
+    "t": { 
+      "command": "terraform",
+      "description": "",
+      "prehooks": [
+        {
+          "run_function": "load_env_file",
+          "run_function_vars": [
+            {
+              "key": "dir",
+              "value": "./config/.env"
+            }
+          ]
+        }
+      ],
+      "posthooks": null
+    }
+  }
+}
+```
+
 ### Defining Aliases
 
 Aliases are defined in the `config.json` file. The file is automatically created when the `clix` command is first run.
