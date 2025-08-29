@@ -41,6 +41,12 @@ Creating custom CLI extenders is an option, but it becomes difficult to maintain
     mv clix /usr/local/bin/
     ```
 
+5.  **Or build it in the desired location:**
+
+    ```bash
+    go build -o /usr/local/bin/clix main.go
+    ```
+
 ## Usage
 
 ### config.json
